@@ -105,6 +105,7 @@ def insert_psa():
     lib.export_df(df_psa, 'df_psa.csv')
 
 
+@lib.add_call_logs
 def insert_approllaccess():
     """GEIDP_Customer_App_Role_Access__c
     """
@@ -138,4 +139,31 @@ def insert_approllaccess():
     
     lib.export_df(df_approllaccess, 'df_approllaccess.csv')
 
+# not tested yet
+@lib.add_call_logs   
+def insert_contact_additional_information():
+    """Contact_Additional_Information__c
+    """
+
+    df_contact = lib.read_df('df_contact.csv')
+    df_cai = lib.read_df('df_cai.csv')
+    print(df_cai)
+    # lookup and update Contact__c related to user
+    for index, row in df_cai.iterrows():
+        contact_record = df_contact[df_contact['Id'] == row['Contact__c']]
+        new_contact_id = contact_record['new_Id'][0]
+        df_cai.at[index, 'Contact__c'] = new_contact_id    
+
+    print(df_cai)
+
+    # insert GEIDP_Customer_App_Role_Access__c one by one
+    for index, row in df_cai.iterrows():
+        
+        record = lib.filter_record(row)
+        try:
+            inserted_cai = sf.Contact_Additional_Information__c.create(record)
+            df_cai.at[index, 'new_Id'] = inserted_cai['id']
+        except:
+            df_cai.at[index, 'new_Id'] = 'Not Inserted by Python Script'
     
+    lib.export_df(df_cai, 'df_cai.csv')
