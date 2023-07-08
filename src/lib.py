@@ -166,6 +166,16 @@ def v_lookup_id(
         df_lookup,
         current_record_id,
     ):
+    """_summary_
+
+    Args:
+        df_current (_type_): _description_
+        df_lookup (_type_): _description_
+        current_record_id (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     for index, row in df_current.iterrows():
         contact_record = df_lookup[df_lookup['Id'] == row[current_record_id]]
         new_contact_id = contact_record['new_Id'][0]
