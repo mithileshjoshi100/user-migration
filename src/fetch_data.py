@@ -52,3 +52,70 @@ def fetch_users():
     
     lib.export_df(df_users, 'df_users.csv')
     logging.info('Users Exported')
+
+
+@lib.add_call_logs
+def fetch_psa():
+    """
+    fetch the PermissionSetAssignment from org
+    provided by email set
+    """
+    r = lib.soql_query_call(
+        sf= sf,
+        query= queries.permissionsetassignment_query,
+        keys= usernames.emails
+    )
+    df_psa = lib.sf_api_query(r)
+
+    lib.export_df(df_psa,'df_psa.csv')
+
+        
+# @lib.add_call_logs
+# def fetch_approllaccess():
+#     """
+#     fetch the GEIDP_Customer_App_Role_Access__c from org
+#     provided by email set
+#     """
+#     r = lib.soql_query_call(
+#         sf= sf,
+#         query= queries.customerappaoleaccess_query,
+#         keys= usernames.emails
+#     )
+#     df_approllaccess = lib.sf_api_query(r)
+
+#     lib.export_df(df_approllaccess,'df_approllaccess.csv')
+#     logging.info('GEIDP_Customer_App_Role_Access__c Exported')
+    
+
+# @lib.add_call_logs
+# def fetch_contact_additional_information():
+#     """
+#     fetch Contact_Additional_Information__c records from org
+#     provided by email set
+#     """
+#     r = lib.soql_query_call(
+#         sf= sf,
+#         query= queries.contactadditionalinformation_query,
+#         keys= usernames.emails
+#     )
+#     df_cai = lib.sf_api_query(r)
+
+#     lib.export_df(df_cai,'df_cai.csv')
+#     logging.info('Contact_Additional_Information__c Exported')
+
+
+# @lib.add_call_logs
+# def fetch_umr():
+#     """
+#     fetch GEIDPUsersFromManualRegFlow__c records from org
+#     provided by email set
+#     """
+#     r = lib.soql_query_call(
+#         sf= sf,
+#         query= queries.usersfrommanualregflow_query,
+#         keys= usernames.emails
+#     )
+#     df_umr = lib.sf_api_query(r)
+
+#     lib.export_df(df_umr,'df_umr.csv')
+#     logging.info('GEIDPUsersFromManualRegFlow__c Exported')

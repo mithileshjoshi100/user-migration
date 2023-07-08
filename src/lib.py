@@ -106,6 +106,8 @@ def read_df(name):
                         + ' probably their is no records to insert')
         logging.error(e)
         df = pd.DataFrame()
+    
+    df = df.fillna('')
     return df
 
 

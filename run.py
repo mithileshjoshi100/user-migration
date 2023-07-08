@@ -7,6 +7,8 @@ if __name__ == '__main__':
 
 # fetch.fetch_contacts()
 # fetch.fetch_users()
+# fetch.fetch_psa()
+# insert.insert_psa()
 # insert.insert_contact()
 # insert.insert_users()
 # import pandas as pd

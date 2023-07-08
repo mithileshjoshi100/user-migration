@@ -55,12 +55,10 @@ def insert_users():
 
     # read the user file
     df_users = lib.read_df('df_users.csv')
-    df_users = df_users.fillna('')
 
     logging.debug("started  lookup for new contact for user records")
     # read contact file
     df_contact = lib.read_df('df_contact.csv')
-    df_contact = df_contact.fillna('')
 
     # lookup and update contact related to user
     for index, row in df_users.iterrows():
@@ -78,3 +76,31 @@ def insert_users():
     
     lib.export_df(df_users, 'df_users.csv')
     logging.info('Users inserted :)')
+
+
+@lib.add_call_logs
+def insert_psa():
+    """PermissionSetAssignment
+    """
+    df_psa = lib.read_df('df_psa.csv')
+    df_users = lib.read_df('df_users.csv')
+    print(df_psa)
+    # lookup and update contact related to user
+    for index, row in df_psa.iterrows():
+        user_record = df_users[df_users['Id'] == row['AssigneeId']]
+        print(user_record)
+        new_user_id = user_record['new_Id'][0]
+        df_psa.at[index, 'AssigneeId'] = new_user_id
+    logging.debug("Lookup finished :)")
+    print(df_psa)
+    # insert user one by one
+    for index, row in df_psa.iterrows():
+        
+        record = lib.filter_record(row)
+        try:
+            inserted_psa = sf.PermissionSetAssignment.create(record)
+            df_psa.at[index, 'new_Id'] = inserted_psa['id']
+        except:
+            df_psa.at[index, 'new_Id'] = '00000000000'
+    lib.export_df(df_psa, 'df_psa.csv')
+
