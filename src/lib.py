@@ -19,69 +19,69 @@ from simple_salesforce import format_soql
 def add_call_logs(func):
     """
     decorator function to
-    log the name,start-time and end-time of exicution
+    log the name,start-time and end-time of execution
 
     Args:
-        func (function): function to exicute
+        func (function): function to execute
     """
-    def wraper(*args, **kwargs):
+
+    def wrapper(*args, **kwargs):
         logging.debug(f'calling function{func.__name__}')
         result = func(*args, **kwargs)
         logging.debug(f'function call ends {func.__name__}')
         return result
-    
-    return wraper
+
+    return wrapper
 
 
 @add_call_logs
 def sf_api_query(data):
     """
-    convert the api responce to pandas DataFream
+    convert the api response to pandas DataFrame
 
     Args:
-        data (dict): responce of query from simple_salesforce
+        data (dict): response of query from simple_salesforce
 
     Returns:
-        DataFream: Table of query result
+        DataFrame: Table of query result
     """
-    
-    if data['totalSize'] == 0: 
+
+    if data['totalSize'] == 0:
         print('No Records found')
         return None
     df = pd.DataFrame(data['records']).drop('attributes', axis=1)
-    
-    listColumns = list(df.columns)
-    for col in listColumns:
-        if any (isinstance (df[col].values[i], dict) 
-                for i in range(0, len(df[col].values))):
+
+    list_columns = list(df.columns)
+    for col in list_columns:
+        if any(isinstance(df[col].values[i], dict)
+               for i in range(0, len(df[col].values))):
             df = pd.concat(
                 [
-                df.drop(columns=[col]),
-                df[col].apply(pd.Series)
-                .drop('attributes',axis=1).add_prefix(col+'.')
+                    df.drop(columns=[col]),
+                    df[col].apply(pd.Series)
+                    .drop('attributes', axis=1).add_prefix(col + '.')
                 ],
-                 axis=1)
-            new_columns = np.setdiff1d(df.columns, listColumns)
+                axis=1)
+            new_columns = np.setdiff1d(df.columns, list_columns)
             for i in new_columns:
-                listColumns.append(i)
+                list_columns.append(i)
     return df
 
 
 @add_call_logs
-def export_df(df,name):
+def export_df(df, name):
     """
-    validate and export datafream to csv file with given name
+    validate and export dataframe to csv file with given name
 
     Args:
-        df (DataFream): DataFream to be exported
+        df (DataFrame): DataFrame to be exported
         name (str): name for the file to export
     """
-    if df is None :
-        logging.error(f'Detafream is emplty can not store to file {name}')
+    if df is None:
+        logging.error(f'Dataframe is empty can not store to file {name}')
         return
     logging.debug(f'writing to file/{name}')
-    df.to_csv(f'files/{name}',index=False)
-
+    df.to_csv(f'files/{name}', index=False)
 
 
 @add_call_logs
@@ -98,18 +98,19 @@ def read_df(name):
         DataFrame: Tabel from csv file
     """
     logging.debug(f'reading file files/{name}')
-    
+
     try:
         df = pd.read_csv(f'files/{name}')
     except FileNotFoundError as e:
         logging.warning(f'file {name} not found,'
-                        +' probably their is no records to insert')
+                        + ' probably their is no records to insert')
+        logging.error(e)
         df = pd.DataFrame()
     return df
 
 
 @add_call_logs
-def soql_query_call(sf,query,keys):
+def soql_query_call(sf, query, keys):
     """
     format and call the soql query
     handle exceptions
@@ -121,35 +122,35 @@ def soql_query_call(sf,query,keys):
         keys (set of strings): set of emails
 
     Returns:
-        json type responce: responce of soql query
+        json type response: response of soql query
     """
-    formated_query = format_soql(
-            query = query,
-            keys = list(keys)
-        )
-    logging.debug('query'+formated_query)
-    r=sf.query_all(
-        formated_query
+    formatted_query: str = format_soql(
+        query=query,
+        keys=list(keys)
     )
-    logging.debug('query exicution sucess')
+    logging.debug('query' + formatted_query)
+    r = sf.query_all(
+        formatted_query
+    )
+    logging.debug('query exicution success')
     return r
 
-    
+
 def filter_record(row):
     """
     filter out the row 
-    remove reletionship fileds and Id filed
+    remove relationship filed and ID filed
 
     Args:
-        row (Pandas Series): single row of datafream
+        row (Pandas Series): single row of dataframe
 
     Returns:
         dict: pure record to insert to salesforce object
     """
     record = dict(
-            filter(
+        filter(
             lambda k: '.' not in k[0] and k[0] != 'Id',
             row.to_dict().items())
-            )
+    )
 
     return record

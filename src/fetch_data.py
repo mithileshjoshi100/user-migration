@@ -27,13 +27,13 @@ def fetch_contacts():
     """
 
     r = lib.soql_query_call(
-        sf= sf,
-        query= queries.contact_query,
-        keys= usernames.emails
+        sf=sf,
+        query=queries.contact_query,
+        keys=usernames.emails
     )
     df_contact = lib.sf_api_query(r)
 
-    lib.export_df(df_contact,'df_contact.csv')
+    lib.export_df(df_contact, 'df_contact.csv')
     logging.info('Contacts Exported')
     
 
@@ -44,13 +44,11 @@ def fetch_users():
     provided by email set
     """
     r = lib.soql_query_call(
-        sf= sf,
-        query= queries.user_query,
-        keys= usernames.emails
+        sf=sf,
+        query=queries.user_query,
+        keys=usernames.emails
     )
     df_users = lib.sf_api_query(r)
     
-    lib.export_df(df_users,'df_users.csv')
+    lib.export_df(df_users, 'df_users.csv')
     logging.info('Users Exported')
-    
-

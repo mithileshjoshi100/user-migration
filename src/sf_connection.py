@@ -38,18 +38,19 @@ except json.decoder.JSONDecodeError:
 
 def sf_new():
     sf_new_instence = Salesforce(
-        username= creds["new_org"]["username"],
-        password= creds["new_org"]["password"],
+        username=creds["new_org"]["username"],
+        password=creds["new_org"]["password"],
         domain='test',
         consumer_key=creds["new_org"]["consumer_key"],
         consumer_secret=creds["new_org"]["consumer_secret"]
         )
     return sf_new_instence
 
+
 def sf_old():
     sf_new_instence = Salesforce(
-        username= creds["old_org"]["username"],
-        password= creds["old_org"]["password"],
+        username=creds["old_org"]["username"],
+        password=creds["old_org"]["password"],
         domain='test',
         consumer_key=creds["old_org"]["consumer_key"],
         consumer_secret=creds["old_org"]["consumer_secret"]

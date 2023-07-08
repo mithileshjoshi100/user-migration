@@ -9,15 +9,15 @@
 ### confidential. Reproduction or distribution, in whole or in part, is
 ### forbidden except by express written permission of ACCENTURE.
 
-'''
-1. Add youe Queries in this file
-2. Must query Id filed for each object (as its required for maping old to new)
+"""
+1. Add Queries in this file
+2. Must query ID filed for each object (as it's required for mapping old to new)
 3. You can add any non-lookup filed to existing query without changing code
-4. all the filed present in the query will added to new record in new org except
-    reletionship filed (name consist of '.' ) and Id filed. 
+4. all the filed present in the query will add to new record in new org except
+    relationship filed (name consist of '.' ) and Id filed.
 3. In {Keys} is will replace by In (usernames) at runtime
-4. Make sure syntax of query is correct and user have permition to read and write all fileds 
-'''
+4. Make sure syntax of query is correct and user have permission to read and write all filed
+"""
 
 contact_query = '''
 SELECT Id, FirstName, LastName, AccountId, MailingCountry, Department,Department__c , Functional_Role__c, Email 
