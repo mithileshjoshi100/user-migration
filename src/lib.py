@@ -159,3 +159,16 @@ def filter_record(row):
     )
 
     return record
+
+
+def v_lookup_id(
+        df_current,
+        df_lookup,
+        current_record_id,
+    ):
+    for index, row in df_current.iterrows():
+        contact_record = df_lookup[df_lookup['Id'] == row[current_record_id]]
+        new_contact_id = contact_record['new_Id'][0]
+        df_current.at[index, current_record_id] = new_contact_id  
+    
+    return df_current
