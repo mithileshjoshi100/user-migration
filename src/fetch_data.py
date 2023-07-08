@@ -119,3 +119,18 @@ def fetch_umr():
 
     lib.export_df(df_umr,'df_umr.csv')
     logging.info('GEIDPUsersFromManualRegFlow__c Exported')
+
+
+@lib.add_call_logs
+def fetch_geidp_entitled_feature():
+    """GEIDP_Entitled_Feature__c
+    """
+    r = lib.soql_query_call(
+        sf=sf,
+        query=queries.geidpentitledfeature_query,
+        keys=usernames.emails
+    )
+    df_feature = lib.sf_api_query(r)
+
+    lib.export_df(df_feature,'df_feature.csv')
+    logging.info('GEIDP_Entitled_Feature__c Exported')

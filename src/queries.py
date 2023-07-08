@@ -58,3 +58,9 @@ SELECT Id, Status__c, ApplicationCountry__c,ProgressiveApplicationName__c, Syste
 FROM GEIDPUsersFromManualRegFlow__c 
 WHERE User__r.Email IN {keys}         
 '''
+
+geidpentitledfeature_query = '''
+SELECT id,User__r.Email, User__c, Contact__c, Role__c, Level__c, GEIDP_Customer_App_Role_Access__c, GEIDP_Customer_App_Role_Access__r.Name 
+FROM GEIDP_Entitled_Feature__c 
+WHERE GEIDP_Customer_App_Role_Access__r.User__r.Email IN {keys}
+'''

@@ -200,3 +200,51 @@ def insert_umr():
             df_umr.at[index, 'new_Id'] = 'Not Inserted by Python Script'
     
     lib.export_df(df_umr, 'df_umr.csv')
+
+# not tested
+@lib.add_call_logs
+def insert_geidp_entitled_feature():
+    """GEIDP_Entitled_Feature__c
+    """
+    
+    df_users = lib.read_df('df_users.csv')
+    df_contact = lib.read_df('df_contact.csv')
+    df_approllaccess = lib.read_df('df_approllaccess.csv')
+    df_feature = lib.read_df('df_feature.csv')
+
+    
+    df_feature = lib.v_lookup_id(
+        df_current=df_feature,
+        df_lookup=df_users,
+        current_record_id='User__c'
+        )
+    
+    df_feature = lib.v_lookup_id(
+        df_current=df_feature,
+        df_lookup=df_contact,
+        current_record_id='Contact__c'
+        )  
+
+    df_feature = lib.v_lookup_id(
+        df_current=df_feature,
+        df_lookup=df_approllaccess,
+        current_record_id='GEIDP_Customer_App_Role_Access__c'
+        )
+    
+    # insert GEIDP_Entitled_Feature__c one by one
+    for index, row in df_feature.iterrows():
+        record = lib.filter_record(row)
+        try:
+            inserted_record = sf.GEIDP_Entitled_Feature__c.create(record)
+            df_feature.at[index, 'new_Id'] = inserted_record['id']
+        except:
+            df_feature.at[index, 'new_Id'] = 'Not Inserted by Python Script'
+    
+    lib.export_df(df_feature, 'df_feature.csv')
+
+
+    
+    
+
+    
+
