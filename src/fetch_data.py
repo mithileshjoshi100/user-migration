@@ -70,21 +70,21 @@ def fetch_psa():
     lib.export_df(df_psa,'df_psa.csv')
 
         
-# @lib.add_call_logs
-# def fetch_approllaccess():
-#     """
-#     fetch the GEIDP_Customer_App_Role_Access__c from org
-#     provided by email set
-#     """
-#     r = lib.soql_query_call(
-#         sf= sf,
-#         query= queries.customerappaoleaccess_query,
-#         keys= usernames.emails
-#     )
-#     df_approllaccess = lib.sf_api_query(r)
+@lib.add_call_logs
+def fetch_approllaccess():
+    """
+    fetch the GEIDP_Customer_App_Role_Access__c from org
+    provided by email set
+    """
+    r = lib.soql_query_call(
+        sf= sf,
+        query= queries.customerappaoleaccess_query,
+        keys= usernames.emails
+    )
+    df_approllaccess = lib.sf_api_query(r)
 
-#     lib.export_df(df_approllaccess,'df_approllaccess.csv')
-#     logging.info('GEIDP_Customer_App_Role_Access__c Exported')
+    lib.export_df(df_approllaccess,'df_approllaccess.csv')
+    logging.info('GEIDP_Customer_App_Role_Access__c Exported')
     
 
 # @lib.add_call_logs

@@ -5,6 +5,7 @@ import src.insert_data as insert
 if __name__ == '__main__':
     pass
 
+# insert.insert_approllaccess()
 # fetch.fetch_contacts()
 # fetch.fetch_users()
 # fetch.fetch_psa()

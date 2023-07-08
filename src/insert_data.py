@@ -101,6 +101,41 @@ def insert_psa():
             inserted_psa = sf.PermissionSetAssignment.create(record)
             df_psa.at[index, 'new_Id'] = inserted_psa['id']
         except:
-            df_psa.at[index, 'new_Id'] = '00000000000'
+            df_psa.at[index, 'new_Id'] = 'Not Inserted by Python Script'
     lib.export_df(df_psa, 'df_psa.csv')
 
+
+def insert_approllaccess():
+    """GEIDP_Customer_App_Role_Access__c
+    """
+
+    # read files
+    df_users = lib.read_df('df_users.csv')
+    df_contact = lib.read_df('df_contact.csv')
+    df_approllaccess = lib.read_df('df_approllaccess.csv')
+
+    # lookup and update UserID__c related to user
+    for index, row in df_approllaccess.iterrows():
+        user_record = df_users[df_users['Id'] == row['UserID__c']]
+        new_user_id = user_record['new_Id'][0]
+        df_approllaccess.at[index, 'UserID__c'] = new_user_id
+
+    # lookup and update Contact__c related to user
+    for index, row in df_approllaccess.iterrows():
+        contact_record = df_contact[df_contact['Id'] == row['Contact__c']]
+        new_contact_id = contact_record['new_Id'][0]
+        df_approllaccess.at[index, 'Contact__c'] = new_contact_id    
+    
+    # insert GEIDP_Customer_App_Role_Access__c one by one
+    for index, row in df_approllaccess.iterrows():
+        
+        record = lib.filter_record(row)
+        try:
+            inserted_approllaccess = sf.GEIDP_Customer_App_Role_Access__c.create(record)
+            df_approllaccess.at[index, 'new_Id'] = inserted_approllaccess['id']
+        except:
+            df_approllaccess.at[index, 'new_Id'] = 'Not Inserted by Python Script'
+    
+    lib.export_df(df_approllaccess, 'df_approllaccess.csv')
+
+    
