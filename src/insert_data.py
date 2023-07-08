@@ -167,3 +167,36 @@ def insert_contact_additional_information():
             df_cai.at[index, 'new_Id'] = 'Not Inserted by Python Script'
     
     lib.export_df(df_cai, 'df_cai.csv')
+
+
+def insert_umr():
+    """GEIDPUsersFromManualRegFlow__c
+    """
+
+    df_users = lib.read_df('df_users.csv')
+    df_contact = lib.read_df('df_contact.csv')
+    df_umr = lib.read_df('df_umr.csv')
+
+    # lookup and update User__c 
+    for index, row in df_umr.iterrows():
+        user_record = df_users[df_users['Id'] == row['User__c']]
+        new_user_id = user_record['new_Id'][0]
+        df_umr.at[index, 'User__c'] = new_user_id
+
+    # lookup and update Contact__c
+    for index, row in df_umr.iterrows():
+        contact_record = df_contact[df_contact['Id'] == row['Contact__c']]
+        new_contact_id = contact_record['new_Id'][0]
+        df_umr.at[index, 'Contact__c'] = new_contact_id  
+    print('contact',df_umr['Contact__c'])
+ 
+    # insert GEIDPUsersFromManualRegFlow__c one by one
+    for index, row in df_umr.iterrows():
+        record = lib.filter_record(row)
+        try:
+            inserted_umr = sf.GEIDPUsersFromManualRegFlow__c.create(record)
+            df_umr.at[index, 'new_Id'] = inserted_umr['id']
+        except:
+            df_umr.at[index, 'new_Id'] = 'Not Inserted by Python Script'
+    
+    lib.export_df(df_umr, 'df_umr.csv')

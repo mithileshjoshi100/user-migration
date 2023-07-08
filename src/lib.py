@@ -151,7 +151,10 @@ def filter_record(row):
     """
     record = dict(
         filter(
-            lambda k: '.' not in k[0] and k[0] != 'Id',
+            lambda k: 
+                '.' not in k[0] 
+                and k[0] != 'Id' 
+                and k[0] != 'new_Id',
             row.to_dict().items())
     )
 

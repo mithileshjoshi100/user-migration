@@ -104,18 +104,18 @@ def fetch_contact_additional_information():
     logging.info('Contact_Additional_Information__c Exported')
 
 
-# @lib.add_call_logs
-# def fetch_umr():
-#     """
-#     fetch GEIDPUsersFromManualRegFlow__c records from org
-#     provided by email set
-#     """
-#     r = lib.soql_query_call(
-#         sf= sf,
-#         query= queries.usersfrommanualregflow_query,
-#         keys= usernames.emails
-#     )
-#     df_umr = lib.sf_api_query(r)
+@lib.add_call_logs
+def fetch_umr():
+    """
+    fetch GEIDPUsersFromManualRegFlow__c records from org
+    provided by email set
+    """
+    r = lib.soql_query_call(
+        sf= sf,
+        query= queries.usersfrommanualregflow_query,
+        keys= usernames.emails
+    )
+    df_umr = lib.sf_api_query(r)
 
-#     lib.export_df(df_umr,'df_umr.csv')
-#     logging.info('GEIDPUsersFromManualRegFlow__c Exported')
+    lib.export_df(df_umr,'df_umr.csv')
+    logging.info('GEIDPUsersFromManualRegFlow__c Exported')
