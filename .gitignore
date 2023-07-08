@@ -1,0 +1,11 @@
+*~
+__pycache__/
+build/
+*.egg-info/
+*.log
+*.csv
+env
+src/__pycache__
+files/*
+.DS_Store
+creds.json
