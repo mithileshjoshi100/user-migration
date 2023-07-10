@@ -31,11 +31,7 @@ def insert_contact():
     df_contact = df_contact.fillna('')
     # insert it to org
     for index, row in df_contact.iterrows():
-        record = dict(
-            filter(
-                lambda k: '.' not in k[0] and k[0] != 'Id',
-                row.to_dict().items())
-            )
+        record = lib.filter_record(row)
         logging.debug(f'creating Contact record for {row["Email"]}')
         inserted_c = sf.Contact.create(record)
 
