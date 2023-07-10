@@ -85,12 +85,13 @@ def insert_psa():
     df_psa = lib.read_df('df_psa.csv')
     df_users = lib.read_df('df_users.csv')
     print(df_psa)
-    # lookup and update contact related to user
-    for index, row in df_psa.iterrows():
-        user_record = df_users[df_users['Id'] == row['AssigneeId']]
-        print(user_record)
-        new_user_id = user_record['new_Id'][0]
-        df_psa.at[index, 'AssigneeId'] = new_user_id
+
+    df_psa = lib.v_lookup_id(
+        df_current=df_psa,
+        df_lookup=df_users,
+        current_record_id='AssigneeId'
+        ) 
+    
     logging.debug("Lookup finished :)")
     print(df_psa)
     # insert user one by one
@@ -115,27 +116,27 @@ def insert_approllaccess():
     df_contact = lib.read_df('df_contact.csv')
     df_approllaccess = lib.read_df('df_approllaccess.csv')
 
-    # lookup and update UserID__c related to user
-    for index, row in df_approllaccess.iterrows():
-        user_record = df_users[df_users['Id'] == row['UserID__c']]
-        new_user_id = user_record['new_Id'][0]
-        df_approllaccess.at[index, 'UserID__c'] = new_user_id
-
-    # lookup and update Contact__c related to user
-    for index, row in df_approllaccess.iterrows():
-        contact_record = df_contact[df_contact['Id'] == row['Contact__c']]
-        new_contact_id = contact_record['new_Id'][0]
-        df_approllaccess.at[index, 'Contact__c'] = new_contact_id    
+    df_approllaccess = lib.v_lookup_id(
+        df_current=df_approllaccess,
+        df_lookup=df_users,
+        current_record_id='UserID__c'
+        ) 
+     
+    df_approllaccess = lib.v_lookup_id(
+        df_current=df_approllaccess,
+        df_lookup=df_contact,
+        current_record_id='Contact__c'
+        )   
     
     # insert GEIDP_Customer_App_Role_Access__c one by one
     for index, row in df_approllaccess.iterrows():
         
         record = lib.filter_record(row)
         try:
-            inserted_approllaccess = sf.GEIDP_Customer_App_Role_Access__c.create(record)
-            df_approllaccess.at[index, 'new_Id'] = inserted_approllaccess['id']
+            inserted_ara = sf.GEIDP_Customer_App_Role_Access__c.create(record)
+            df_approllaccess.at[index, 'new_Id'] = inserted_ara['id']
         except:
-            df_approllaccess.at[index, 'new_Id'] = 'Not Inserted by Python Script'
+            df_approllaccess.at[index, 'new_Id'] = '########'
     
     lib.export_df(df_approllaccess, 'df_approllaccess.csv')
 
@@ -147,14 +148,12 @@ def insert_contact_additional_information():
 
     df_contact = lib.read_df('df_contact.csv')
     df_cai = lib.read_df('df_cai.csv')
-    print(df_cai)
-    # lookup and update Contact__c related to user
-    for index, row in df_cai.iterrows():
-        contact_record = df_contact[df_contact['Id'] == row['Contact__c']]
-        new_contact_id = contact_record['new_Id'][0]
-        df_cai.at[index, 'Contact__c'] = new_contact_id    
 
-    print(df_cai)
+    df_cai = lib.v_lookup_id(
+        df_current=df_cai,
+        df_lookup=df_contact,
+        current_record_id='Contact__c'
+        )    
 
     # insert GEIDP_Customer_App_Role_Access__c one by one
     for index, row in df_cai.iterrows():
@@ -164,7 +163,7 @@ def insert_contact_additional_information():
             inserted_cai = sf.Contact_Additional_Information__c.create(record)
             df_cai.at[index, 'new_Id'] = inserted_cai['id']
         except:
-            df_cai.at[index, 'new_Id'] = 'Not Inserted by Python Script'
+            df_cai.at[index, 'new_Id'] = '########'
     
     lib.export_df(df_cai, 'df_cai.csv')
 
@@ -177,18 +176,17 @@ def insert_umr():
     df_contact = lib.read_df('df_contact.csv')
     df_umr = lib.read_df('df_umr.csv')
 
-    # lookup and update User__c 
-    for index, row in df_umr.iterrows():
-        user_record = df_users[df_users['Id'] == row['User__c']]
-        new_user_id = user_record['new_Id'][0]
-        df_umr.at[index, 'User__c'] = new_user_id
+    df_umr = lib.v_lookup_id(
+        df_current=df_umr,
+        df_lookup=df_users,
+        current_record_id='User__c'
+        )  
 
-    # lookup and update Contact__c
-    for index, row in df_umr.iterrows():
-        contact_record = df_contact[df_contact['Id'] == row['Contact__c']]
-        new_contact_id = contact_record['new_Id'][0]
-        df_umr.at[index, 'Contact__c'] = new_contact_id  
-    print('contact',df_umr['Contact__c'])
+    df_umr = lib.v_lookup_id(
+        df_current=df_umr,
+        df_lookup=df_contact,
+        current_record_id='Contact__c'
+        )  
  
     # insert GEIDPUsersFromManualRegFlow__c one by one
     for index, row in df_umr.iterrows():
@@ -197,7 +195,7 @@ def insert_umr():
             inserted_umr = sf.GEIDPUsersFromManualRegFlow__c.create(record)
             df_umr.at[index, 'new_Id'] = inserted_umr['id']
         except:
-            df_umr.at[index, 'new_Id'] = 'Not Inserted by Python Script'
+            df_umr.at[index, 'new_Id'] = '########'
     
     lib.export_df(df_umr, 'df_umr.csv')
 
@@ -212,13 +210,12 @@ def insert_geidp_entitled_feature():
     df_approllaccess = lib.read_df('df_approllaccess.csv')
     df_feature = lib.read_df('df_feature.csv')
 
-    
     df_feature = lib.v_lookup_id(
         df_current=df_feature,
         df_lookup=df_users,
         current_record_id='User__c'
         )
-    
+
     df_feature = lib.v_lookup_id(
         df_current=df_feature,
         df_lookup=df_contact,
@@ -238,7 +235,7 @@ def insert_geidp_entitled_feature():
             inserted_record = sf.GEIDP_Entitled_Feature__c.create(record)
             df_feature.at[index, 'new_Id'] = inserted_record['id']
         except:
-            df_feature.at[index, 'new_Id'] = 'Not Inserted by Python Script'
+            df_feature.at[index, 'new_Id'] = '########'
     
     lib.export_df(df_feature, 'df_feature.csv')
 

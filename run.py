@@ -5,17 +5,30 @@ import src.insert_data as insert
 if __name__ == '__main__':
     pass
 
-insert.insert_geidp_entitled_feature()
-# fetch.fetch_geidp_entitled_feature()
-# fetch.fetch_umr()
-# insert.insert_umr()
-# insert.insert_approllaccess()
+# insert.insert_geidp_entitled_feature()
+
+
+
 # fetch.fetch_contacts()
 # fetch.fetch_users()
 # fetch.fetch_psa()
-# insert.insert_psa()
+# fetch.fetch_approllaccess()
+# fetch.fetch_contact_additional_information()
+# fetch.fetch_umr()
+# fetch.fetch_geidp_entitled_feature()
+
 # insert.insert_contact()
 # insert.insert_users()
+# insert.insert_psa()
+# insert.insert_approllaccess()
+# insert.insert_contact_additional_information()
+# insert.insert_umr()
+insert.insert_geidp_entitled_feature()
+
+
+
+
+
 # import pandas as pd
 
 # df = pd.read_csv('files/df_contact.csv')

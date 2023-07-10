@@ -177,8 +177,14 @@ def v_lookup_id(
         _type_: _description_
     """
     for index, row in df_current.iterrows():
-        contact_record = df_lookup[df_lookup['Id'] == row[current_record_id]]
-        new_contact_id = contact_record['new_Id'][0]
-        df_current.at[index, current_record_id] = new_contact_id  
+        object_record = df_lookup[df_lookup['Id'] == row[current_record_id]]
+        new_object_id = ''
+        if len(object_record) == 1:
+            for new_id in object_record['new_Id']:
+                new_object_id = new_id
+        else:
+            ## need to handle
+            pass
+        df_current.at[index, current_record_id] = new_object_id  
     
     return df_current

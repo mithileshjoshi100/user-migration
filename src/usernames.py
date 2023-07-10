@@ -10,5 +10,5 @@
 ### forbidden except by express written permission of ACCENTURE.
 
 emails = {
- 'testft2019+avurirefresh005@gmail.com'
-}
+    'testft2019+cdx_17feb_qa1@gmail.com'
+    }
